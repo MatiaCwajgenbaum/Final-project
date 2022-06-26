@@ -1,4 +1,15 @@
 import numpy as np
+import keras.backend as K
+
+def IoU_coeff(y_true, y_pred):
+    y_true_f = K.cast(K.flatten(y_true), 'float32')
+    y_pred = K.cast(y_pred, 'float32')
+    y_pred_f = K.cast(K.greater(K.flatten(y_pred), 0.5), 'float32')
+    intersection = y_true_f * y_pred_f
+    mask = K.sum(y_true_f) + K.sum(y_pred_f)
+    union = mask - K.sum(intersection)
+    iou = (K.sum(intersection) + smooth) / (union + smooth)
+    return iou
 
 def dice_coef(y_true, y_pred):
     y_true_f = y_true.flatten()
